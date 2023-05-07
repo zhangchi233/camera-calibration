@@ -1,1 +1,3 @@
 # camera-calibration
+## i have already write the equation to solve for K, R, T, AND IF WE INPUT A 3D POINT [X,Y,Z,1] we can obtain [SU,SV,S], THE COORDINATE ON IMAGE IS [U,V]
+SO WE CAN OBTAIN THE COORDIANTE BY DIVIDE THE FIRST AND SECOND ENTRY OF LINEAR ALGEBRA RESULT BY THE THIRD ENTRY

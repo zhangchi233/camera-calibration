@@ -1,0 +1,13 @@
+{
+  "OutputFoldersPerTargetSystem": {
+    "本地计算机": [
+      "out\\build\\x64-Debug",
+      "out\\install\\x64-Debug"
+    ]
+  },
+  "ExpandedNodes": [
+    ""
+  ],
+  "SelectedNode": "\\全局设置(C:\\Users\\32575\\AppData\\Local\\Microsoft\\VisualStudio\\17.0_03f0ada2\\OpenFolder)",
+  "PreviewInSolutionExplorer": false
+}

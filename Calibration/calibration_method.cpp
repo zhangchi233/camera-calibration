@@ -228,18 +228,18 @@ bool Calibration::calibration(
         P.set_row(2 * i+1, {0,0,0,0,points_3d[i].x(),points_3d[i].y(),points_3d[i].z() ,1,
             -v * points_3d[i].x(),-v * points_3d[i].y(),-v * points_3d[i].z(),-v });
     }
-
+    // remember Pm = 0 and m is the flattened matrix of M = K[R|t]
     // TODO: solve for M (the whole projection matrix, i.e., M = K * [R, t]) using SVD decomposition.
     int m = int(points_3d.size() * 2);
     int n = 12;
     Matrix U(m, m, 0.0);   // initialized with 0s
     Matrix S(m, n, 0.0);   // initialized with 0s
     Matrix V(n, n, 0.0); 
-    
+    // do svd decomposition and get M from V which subject to Pm = 0 and ||m|| = 1
     svd_decompose(P, U, S, V);
     
     Vector M =V.get_column(11);
-    std::cout<<"SVD RESULT " << mult(P, M) <<"finished" << std::endl;
+    std::cout<<"SVD RESULT " << mult(P, M) <<"finished" << std::endl; // check if Pm = 0
     //   Optional: you can check if your M is correct by applying M on the 3D points. If correct, the projected point
     //             should be very close to your input images points.
 
@@ -247,7 +247,7 @@ bool Calibration::calibration(
     Vector3D a3 = { M[8],M[9],M[10]};
     Vector3D a1 = { M[0],M[1],M[2]};
     Vector3D a2 = { M[4],M[5],M[6]};
-    // output M and scale
+    // calculate the value of rho
     double scale = 1 / a3.length();
     // output M and scale and a3
     std::cout << "scale: " << scale << std::endl;
@@ -267,6 +267,7 @@ bool Calibration::calibration(
     double theta = acos(Cosin_theta);
     skew = -alpha * Cosin_theta / sin_theta;
     Matrix33 K(alpha, skew, cx,0,beta,cy,0,0,1);
+    // K^-1
     Matrix invK;
     invK = inverse(K);
     Vector r1 =  cross(a2,a3)/a2xa3.length();
@@ -275,28 +276,28 @@ bool Calibration::calibration(
     Vector3D b(M[3], M[7], M[11]);
 
 
-
+    // extrinsic parameters
     t = scale * mult(invK, b);
     R = Matrix33(r1[0], r1[1], r1[2], r2[0], r2[1], r2[2], r3[0], r3[1], r3[2]);
 
     // TODO: extract extrinsic parameters from M.
    // test whether the corresponed point is correct or not, given the points_3d wether we obtain the points_2d
-    Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t]
+    Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t], which is extrinsic matrix
     extrinsic.set_column(0, R.get_column(0));
     extrinsic.set_column(1, R.get_column(1));
     extrinsic.set_column(2, R.get_column(2));
     extrinsic.set_column(3, t);
-    // given a random 3d point from points_3d, we can obtain the 2d point
+    // given a random 3d point from points_3d, we can obtain the 2d point, the result should be the same as the points_2d
     Vector3D test = points_3d[0];
     Vector4D test1 = { test[0],test[1],test[2],1 };
-
+    // CALCULATE [SU,SV,S] = [K[R|t]] * [X,Y,Z,1], NOTICE THE TRUE 2D COORD SHOULD BE [SU/S,SV/S,S]
     Vector3D test2d = mult(K, mult(extrinsic, test1));
     // output the m and
     Matrix34 M1 = mult(K, extrinsic);
-    // output the m and m1
+    // output the m and m1, m1 should be the same as SCLAE* m
     std::cout << "M1: " << M1 << std::endl;
     std::cout << "M: " << scale* M << std::endl;
-
+    // out put and compare the 2d points ground truth and the points we obtain from the 3d points
 
     std::cout << "test2d" <<" " << test2d/test2d[2] << std::endl;
 

@@ -1,0 +1,17 @@
+{
+  "OutputFoldersPerTargetSystem": {
+    "本地计算机": [
+      "out\\build\\x64-Debug",
+      "out\\install\\x64-Debug"
+    ]
+  },
+  "ExpandedNodes": [
+    "",
+    "\\Calibration",
+    "\\easy3d",
+    "\\out",
+    "\\out\\build"
+  ],
+  "SelectedNode": "\\Calibration\\calibration_method.cpp",
+  "PreviewInSolutionExplorer": false
+}

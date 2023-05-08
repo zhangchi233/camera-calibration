@@ -266,7 +266,7 @@ bool Calibration::calibration(
     cy = pow(scale, 2) * dot(a2, a3);
     double theta = acos(Cosin_theta);
     skew = -alpha * Cosin_theta / sin_theta;
-    Matrix33 K(alpha, skew, cx,0,beta,cy,0,0,1);
+    Matrix33 K(alpha, skew, cx,0,beta/sin_theta,cy,0,0,1);
     // K^-1
     Matrix invK;
     invK = inverse(K);

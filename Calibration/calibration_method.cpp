@@ -265,7 +265,7 @@ bool Calibration::calibration(
     // TODO: extract intrinsic parameters from M.
     Vector3D r1 = a2a3 / a2a3.length();
     Vector3D r3 = scale * a3;
-    Vector3D r2 = cross(r1,r3);
+    Vector3D r2 = cross(r3,r1);
     Vector3D b(M[3], M[7], M[11]);
     Matrix invK = inverse(K);
     t = scale * mult(invK, b)  ;
@@ -298,7 +298,7 @@ bool Calibration::calibration(
     std::cout << "M1: " << M1 << std::endl;
     std::cout << "M: " << scale* M << std::endl;
     // out put and compare the 2d points ground truth and the points we obtain from the 3d points
-
+    std::cout << "extrinsic " << extrinsic << std::endl;
     std::cout << "test2d" <<" " << test2d/test2d[2] << std::endl;
 
     std::cout << "points_2d[0]" <<" " << points_2d[0] << std::endl;
@@ -310,6 +310,8 @@ bool Calibration::calibration(
                  "\t\tif your calibration is successful or not.\n\n" << std::flush;
     return true;
 }
+
+
 
 
 

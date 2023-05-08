@@ -76,8 +76,7 @@ bool Calibration::calibration(
     //       final submission.
 
     //--------------------------------------------------------------------------------------------------------------
-    // implementation starts ...
-    */
+
     std::cout << "\n[Liangliang]:\n"
                  "\tThe input parameters of this function are:\n"
                  "\t\t- points_3d: An array of 3D points (input to this function)\n"

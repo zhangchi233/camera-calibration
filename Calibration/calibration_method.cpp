@@ -255,8 +255,8 @@ bool Calibration::calibration(
     double sin_theta = sqrt(1-pow(cos_theta,2));
     double alpha = scale2 * a1a3.length() * sin_theta;
     double beta = scale2 * a2a3.length() * sin_theta;
-    fx = alpha; skew = -alpha*cos_theta/sin_theta; cx = u0; fy = beta/sin_theta; fy = v0;
-    Matrix33 K(fx,skew,cx,0,fy,fy,0,0,1);
+    fx = alpha; skew = -alpha*cos_theta/sin_theta; cx = u0; fy = beta/sin_theta; cy = v0;
+    Matrix33 K(fx,skew,cx,0,fy,cy,0,0,1);
 
     std::cout<<"SVD RESULT " << mult(P, M) <<"finished" << std::endl; // check if Pm = 0
     //   Optional: you can check if your M is correct by applying M on the 3D points. If correct, the projected point
@@ -310,14 +310,6 @@ bool Calibration::calibration(
                  "\t\tif your calibration is successful or not.\n\n" << std::flush;
     return true;
 }
-
-
-
-
-
-
-
-
 
 
 

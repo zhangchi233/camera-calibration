@@ -1,0 +1,11 @@
+Determining if the include file pthread.h exists failed with the following output:
+Change Dir: D:/Delft/q4/photo/A1/A1_Calibration_Code/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):D:/CLion 2022.2.4/bin/ninja/win/ninja.exe cmTC_339db && [1/2] Building C object CMakeFiles\cmTC_339db.dir\CheckIncludeFile.c.obj
+FAILED: CMakeFiles/cmTC_339db.dir/CheckIncludeFile.c.obj 
+C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx86\x86\cl.exe  /nologo   /DWIN32 /D_WINDOWS /W3  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\cmTC_339db.dir\CheckIncludeFile.c.obj /FdCMakeFiles\cmTC_339db.dir\ /FS -c D:\Delft\q4\photo\A1\A1_Calibration_Code\cmake-build-debug\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+D:\Delft\q4\photo\A1\A1_Calibration_Code\cmake-build-debug\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1): fatal error C1083: 无法打开包括文件: “pthread.h”: No such file or directory
+ninja: build stopped: subcommand failed.
+
+
+

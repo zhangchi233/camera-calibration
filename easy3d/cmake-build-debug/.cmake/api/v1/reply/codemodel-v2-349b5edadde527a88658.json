@@ -1,0 +1,191 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "core",
+					"jsonFile" : "directory-core-Debug-e3757ce4a321da3133c4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "core",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "fileio",
+					"jsonFile" : "directory-fileio-Debug-b912011991a923cc6e2c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "fileio",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "util",
+					"jsonFile" : "directory-util-Debug-88dfab35cbcc10198186.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "util",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "viewer",
+					"jsonFile" : "directory-viewer-Debug-c5a6f15289a38e348038.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "viewer",
+					"targetIndexes" : 
+					[
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Project"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "easy3d_core",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "easy3d_fileio",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "easy3d_util",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "easy3d_viewer",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "easy3d_core::@57760688d1f824db5d9c",
+					"jsonFile" : "target-easy3d_core-Debug-6690a3d0f5883731c02a.json",
+					"name" : "easy3d_core",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "easy3d_fileio::@ec6088c15241651892c0",
+					"jsonFile" : "target-easy3d_fileio-Debug-8a02b01e68aea0503617.json",
+					"name" : "easy3d_fileio",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "easy3d_util::@5865449b717dd869d2cd",
+					"jsonFile" : "target-easy3d_util-Debug-c85f7dfec02df0ba6c92.json",
+					"name" : "easy3d_util",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "easy3d_viewer::@4ad571843d929affe7de",
+					"jsonFile" : "target-easy3d_viewer-Debug-6bb805872974ba22e292.json",
+					"name" : "easy3d_viewer",
+					"projectIndex" : 4
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Delft/q4/photo/A1/A1_Calibration_Code/easy3d/cmake-build-debug",
+		"source" : "D:/Delft/q4/photo/A1/A1_Calibration_Code/easy3d"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

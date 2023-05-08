@@ -251,7 +251,7 @@ bool Calibration::calibration(
     Vector3D a2a3 = cross(a2,a3);
     double u0 = scale2* dot(a1,a3);
     double v0 = scale2* dot(a2,a3);
-    double cos_theta = -dot(a1a3,a2a3)/(a1a3.length()*a2a3.length());
+    double cos_theta = dot(a1a3,a2a3)/(a1a3.length()*a2a3.length());
     double sin_theta = sqrt(1-pow(cos_theta,2));
     double alpha = scale2 * a1a3.length() * sin_theta;
     double beta = scale2 * a2a3.length() * sin_theta;

@@ -275,7 +275,11 @@ bool Calibration::calibration(
     // output M and scale and a3
     std::cout << "scale: " << scale << std::endl;
     std::cout << "a3: " << a3 << std::endl;
-
+    std::cout << "R: " << R << std::endl;
+    std::cout << "t: " << t << std::endl;
+    std::cout << "K: " << K << std::endl;
+    std::cout << "b: " << b << std::endl;
+    std::cout << "invK: " << invK << std::endl;
 // TODO: extract extrinsic parameters from M.
     // test whether the corresponed point is correct or not, given the points_3d wether we obtain the points_2d
     Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t], which is extrinsic matrix
@@ -306,15 +310,6 @@ bool Calibration::calibration(
                  "\t\tif your calibration is successful or not.\n\n" << std::flush;
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 
 

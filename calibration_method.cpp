@@ -24,6 +24,10 @@
 
 #include "calibration.h"
 #include "matrix_algo.h"
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cmath>
 
 
 using namespace easy3d;
@@ -235,18 +239,26 @@ bool Calibration::calibration(
     Matrix U(m, m, 0.0);   // initialized with 0s
     Matrix S(m, n, 0.0);   // initialized with 0s
     Matrix V(n, n, 0.0); 
-    Matrix M(m, 1, 0.0);
+    
     svd_decompose(P, U, S, V);
     
-    M.set_column(0,V.get_column(11));
+    Vector M =V.get_column(11);
+    std::cout<<"SVD RESULT " << mult(P, M) <<"finished" << std::endl;
     //   Optional: you can check if your M is correct by applying M on the 3D points. If correct, the projected point
     //             should be very close to your input images points.
 
     // TODO: extract intrinsic parameters from M.
-    Vector3D a3 = { M[8][0],M[9][0],M[10][0]};
-    Vector3D a1 = { M[0][0],M[1][0],M[2][0]};
-    Vector3D a2 = { M[4][0],M[5][0],M[6][0]};
+    Vector3D a3 = { M[8],M[9],M[10]};
+    Vector3D a1 = { M[0],M[1],M[2]};
+    Vector3D a2 = { M[4],M[5],M[6]};
+    // output M and scale
     double scale = 1 / a3.length();
+    // output M and scale and a3
+    std::cout << "scale: " << scale << std::endl;
+    std::cout << "a3: " << a3 << std::endl;
+    for (int i = 0; i < M.size(); i++) {
+		std::cout << "M[" << i << "]: " << M[i] << std::endl;
+	}
     Vector a1xa3 = cross(a1, a3);
     Vector a2xa3 = cross(a2, a3);
     double Cosin_theta = dot(a1xa3, a2xa3) / (a1xa3.length() * a2xa3.length());
@@ -260,10 +272,11 @@ bool Calibration::calibration(
     skew = -alpha * Cosin_theta / sin_theta;
     Matrix33 K(alpha, skew, cx,0,beta,cy,0,0,1);
     Matrix invK;
+    invK = inverse(K);
     Vector r1 =  cross(a2,a3)/a2xa3.length();
     Vector r3 = scale* a3;
     Vector r2 = cross(r3, r1);
-    Vector3D b(M[0][3], M[1][3], M[2][3]);
+    Vector3D b(M[3], M[7], M[11]);
 
 
 
@@ -271,6 +284,108 @@ bool Calibration::calibration(
     R = Matrix33(r1[0], r1[1], r1[2], r2[0], r2[1], r2[2], r3[0], r3[1], r3[2]);
 
     // TODO: extract extrinsic parameters from M.
+   // test whether the corresponed point is correct or not, given the points_3d wether we obtain the points_2d
+    Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t]
+    extrinsic.set_column(0, R.get_column(0));
+    extrinsic.set_column(1, R.get_column(1));
+    extrinsic.set_column(2, R.get_column(2));
+    extrinsic.set_column(3, t);
+    // given a random 3d point from points_3d, we can obtain the 2d point
+    Vector3D test = points_3d[0];
+    Vector4D test1 = { test[0],test[1],test[2],1 };
+
+    Vector3D test2d = mult(K, mult(extrinsic, test1));
+    // output the m and
+    Matrix34 M1 = mult(K, extrinsic);
+    // output the m and m1
+    std::cout << "M1: " << M1 << std::endl;
+    std::cout << "M: " << scale* M << std::endl;
+
+
+    std::cout << "test2d" <<" " << test2d/test2d[2] << std::endl;
+
+    std::cout << "points_2d[0]" <<" " << points_2d[0] << std::endl;
+//    // Error analysis
+
+
+    std::vector<double> errors_x;
+    std::vector<double> errors_y;
+
+    std::cout << std::left << std::setw(10) << "Point"
+              << std::left << std::setw(20) << "Real x"
+              << std::left << std::setw(20) << "Predicted x"
+              << std::left << std::setw(15) << "Error x"
+              << std::left << std::setw(20) << "Real y"
+              << std::left << std::setw(20) << "Predicted y"
+              << std::left << std::setw(15) << "Error y" << std::endl;
+
+    std::cout << std::left << std::setw(10) << "----------"
+              << std::left << std::setw(20) << "--------------------"
+              << std::left << std::setw(20) << "--------------------"
+              << std::left << std::setw(15) << "---------------"
+              << std::left << std::setw(20) << "--------------------"
+              << std::left << std::setw(20) << "--------------------"
+              << std::left << std::setw(15) << "---------------" << std::endl;
+
+    for (int i = 0; i < points_2d.size(); i++){
+        Vector3D temp3d = points_3d[i];
+        Vector4D temp1 = { temp3d[0],temp3d[1],temp3d[2],1 };
+        Vector3D temp2d = mult(K, mult(extrinsic, temp1));
+        temp2d = temp2d/temp2d[2];
+
+        double error_x = std::abs((points_2d[i][0] - temp2d[0]));
+        double error_y = std::abs((points_2d[i][1] - temp2d[1]));
+
+        errors_x.push_back(error_x);
+        errors_y.push_back(error_y);
+
+        std::cout << std::left << std::setw(10) << i
+                  << std::left << std::setw(20) << points_2d[i][0]
+                  << std::left << std::setw(20) << temp2d[0]
+                  << std::left << std::setw(15) << error_x
+                  << std::left << std::setw(20) << points_2d[i][1]
+                  << std::left << std::setw(20) << temp2d[1]
+                  << std::left << std::setw(15) << error_y << std::endl;
+    }
+
+    // calculate indicators
+    double mse_x = 0.0;
+    double mse_y = 0.0;
+    double mae_x = 0.0;
+    double mae_y = 0.0;
+    double std_x = 0.0;
+    double std_y = 0.0;
+
+    for (int i = 0; i < errors_x.size(); i++) {
+        mse_x += errors_x[i] * errors_x[i];
+        mse_y += errors_y[i] * errors_y[i];
+        mae_x += errors_x[i];
+        mae_y += errors_y[i];
+    }
+
+    mse_x /= errors_x.size();
+    mse_y /= errors_y.size();
+    mae_x /= errors_x.size();
+    mae_y /= errors_y.size();
+
+    for (int i = 0; i < errors_x.size(); i++) {
+        std_x += (errors_x[i] - mae_x) * (errors_x[i] - mae_x);
+        std_y += (errors_y[i] - mae_y) * (errors_y[i] - mae_y);
+    }
+
+    std_x = std::sqrt(std_x / errors_x.size());
+    std_y = std::sqrt(std_y / errors_y.size());
+
+// output error indicators
+    std::cout << "MSE_x: " << mse_x << std::endl;
+    std::cout << "MSE_y: " << mse_y << std::endl;
+    std::cout << "MAE_x: " << mae_x << std::endl;
+    std::cout << "MAE_y: " << mae_y << std::endl;
+    std::cout << "STD_x: " << std_x << std::endl;
+    std::cout << "STD_y: " << std_y << std::endl;
+
+
+
 
     std::cout << "\n\tTODO: After you implement this function, please return 'true' - this will trigger the viewer to\n"
                  "\t\tupdate the rendering using your recovered camera parameters. This can help you to visually check\n"

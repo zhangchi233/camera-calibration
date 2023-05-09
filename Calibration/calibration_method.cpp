@@ -68,130 +68,7 @@ bool Calibration::calibration(
                  "\t    - do NOT include the 'build' directory (which contains the intermediate files in a build step).\n"
                  "\t    - make sure your code compiles and can reproduce your results without ANY modification.\n\n" << std::flush;
 
-    /// Below are a few examples showing some useful data structures and functions.
 
-    // This is a 1D array of 'double' values. Alternatively, you can use 'double mat[25]' but you cannot change it
-    // length. With 'std::vector', you can append/delete/insert elements, and much more. The 'std::vector' can store
-    // not only 'double', but also any other types of objects. In case you may want to learn more about 'std::vector'
-    // check here: https://en.cppreference.com/w/cpp/container/vector
-    /*
-    std::vector<double> array = {1, 3, 3, 4, 7, 6, 2, 8, 2, 8, 3, 2, 4, 9, 1, 7, 3, 23, 2, 3, 5, 2, 1, 5, 8, 9, 22};
-    array.push_back(5); // append 5 to the array (so the size will increase by 1).
-    array.insert(array.end(), 10, 3);  // append ten 3 (so the size will grow by 10).
-
-    /// To access the value of an element.
-    double a = array[2];
-
-    /// define a 2D vector/point
-    Vector2D b(1.1, 2.2);
-
-    /// define a 3D vector/point
-    Vector3D c(1.1, 2.2, 3.3);
-
-    /// get the Cartesian coordinates of a (a is treated as Homogeneous coordinates)
-    Vector2D p = c.cartesian();
-
-    /// get the Homogeneous coordinates of p
-    Vector3D q = p.homogeneous();
-
-    /// the length of a vector
-    double len = p.length();
-    /// the squared length of a vector
-    double sqr_len = p.length2();
-
-    /// the dot product of two vectors
-    double dot_prod = dot(p, q);
-
-    /// the cross product of two vectors
-    Vector cross_prod = cross(c, q);
-
-    /// normalize this vector
-    cross_prod.normalize();
-
-    // Define an m-by-n double valued matrix.
-    // Here I use the above array to initialize it. You can also use A(i, j) to initialize/modify/access its elements.
-    const int m = 6, n = 5;
-    Matrix A(m, n, array.data());    // 'array.data()' returns a pointer to the array.
-//    std::cout << "M: \n" << A << std::endl;
-
-    /// define a 3 by 4 matrix (and all elements initialized to 0.0)
-    Matrix M(3, 4, 0.0);
-
-    /// set first row by a vector
-    M.set_row(0, Vector4D(1.1, 2.2, 3.3, 4.4));
-
-    /// set second column by a vector
-    M.set_column(1, Vector3D(5.5, 5.5, 5.5));
-
-    /// define a 3 by 3 matrix (and all elements initialized to 0.0)
-    Matrix33 B;
-
-    /// define and initialize a 3 by 3 matrix
-    Matrix33 T(1.1, 2.2, 3.3,
-               0, 2.2, 3.3,
-               0, 0, 1);
-
-    /// define and initialize a 3 by 4 matrix
-    Matrix34 P(1.1, 2.2, 3.3, 0,
-               0, 2.2, 3.3, 1,
-               0, 0, 1, 1);
-
-    /// define a 15 by 9 matrix (and all elements initialized to 0.0)
-    Matrix W(15, 9, 0.0);
-    /// set the first row by a 9-dimensional vector
-    W.set_row(0, {0, 1, 2, 3, 4, 5, 6, 7, 8}); // {....} is equivalent to a std::vector<double>
-
-    /// get the number of rows.
-    int num_rows = W.rows();
-
-    /// get the number of columns.
-    int num_cols = W.cols();
-
-    /// get the the element at row 1 and column 2
-    double value = W(1, 2);
-
-    /// get the last column of a matrix
-    Vector last_column = W.get_column(W.cols() - 1);
-
-    /// define a 3 by 3 identity matrix
-    Matrix33 I = Matrix::identity(3, 3, 1.0);
-
-    /// matrix-vector product
-    Vector3D v = M * Vector4D(1, 2, 3, 4); // M is 3 by 4
-
-    Matrix U(m, m, 0.0);   // initialized with 0s
-    Matrix S(m, n, 0.0);   // initialized with 0s
-    Matrix V(n, n, 0.0);   // initialized with 0s
-
-    // Compute the SVD decomposition of A
-    svd_decompose(A, U, S, V);
-
-    // Now let's check if the SVD result is correct
-
-    // Check 1: U is orthogonal, so U * U^T must be identity
-//    std::cout << "U*U^T: \n" << U * transpose(U) << std::endl;
-
-    // Check 2: V is orthogonal, so V * V^T must be identity
-//    std::cout << "V*V^T: \n" << V * transpose(V) << std::endl;
-
-    // Check 3: S must be a diagonal matrix
-//    std::cout << "S: \n" << S << std::endl;
-
-    // Check 4: according to the definition, A = U * S * V^T
-//    std::cout << "M - U * S * V^T: \n" << A - U * S * transpose(V) << std::endl;
-
-    // Compute the inverse of a matrix
-    Matrix invT;
-    inverse(T, invT);
-    // Let's check if the inverse is correct
-//    std::cout << "B * invB: \n" << B * invB << std::endl;
-
-    // TODO: the above code just demonstrates some useful data structures and APIs. Please remove all above code in your
-    //       final submission.
-
-    //--------------------------------------------------------------------------------------------------------------
-    // implementation starts ...
-    */
     std::cout << "\n[Liangliang]:\n"
                  "\tThe input parameters of this function are:\n"
                  "\t\t- points_3d: An array of 3D points (input to this function)\n"
@@ -251,20 +128,17 @@ bool Calibration::calibration(
     double scale = 1 / a3.length();
     // output M and scale and a3
     std::cout << "scale: " << scale << std::endl;
-    std::cout << "a3: " << a3 << std::endl;
-    for (int i = 0; i < M.size(); i++) {
-		std::cout << "M[" << i << "]: " << M[i] << std::endl;
-	}
+    
     Vector a1xa3 = cross(a1, a3);
     Vector a2xa3 = cross(a2, a3);
-    double Cosin_theta = dot(a1xa3, a2xa3) / (a1xa3.length() * a2xa3.length());
+    double Cosin_theta = - dot(a1xa3, a2xa3) / (a1xa3.length() * a2xa3.length());
 
     double sin_theta = sqrt(1 - Cosin_theta * Cosin_theta);
+    
     double alpha = pow(scale,2) * a1xa3.length() * sin_theta;
     double beta = pow(scale,2) * a2xa3.length() * sin_theta;
     cx = pow(scale, 2) * dot(a1, a3);
     cy = pow(scale, 2) * dot(a2, a3);
-    double theta = acos(Cosin_theta);
     skew = -alpha * Cosin_theta / sin_theta;
     Matrix33 K(alpha, skew, cx,0,beta/sin_theta,cy,0,0,1);
     // K^-1
@@ -298,10 +172,106 @@ bool Calibration::calibration(
     std::cout << "M1: " << M1 << std::endl;
     std::cout << "M: " << scale* M << std::endl;
     // out put and compare the 2d points ground truth and the points we obtain from the 3d points
+    test2d /= abs(test2d[2]);
+    std::cout << "test2d" <<" " << test2d << std::endl;
+    
 
-    std::cout << "test2d" <<" " << test2d/test2d[2] << std::endl;
+    std::cout << "points_2d[0]s" <<" " << points_2d[0] << std::endl;
+    // decide the sign of scale
+    if (test2d[2]-0 <-0.0001) {
+        std::cout << "scale changed is: " << scale << std::endl;
+        scale = -scale;
 
-    std::cout << "points_2d[0]" <<" " << points_2d[0] << std::endl;
+       
+        
+        std::cout << "scale changed is: " << scale << std::endl;
+        // extrinsic parameters
+        t = -t;
+        R[2][0] *= -1;
+        R[2][1] *= -1;
+        R[2][2] *= -1;
+    }
+    fx = alpha;
+    fy = beta/sin_theta;
+    //    // Error analysis
+
+
+    std::vector<double> errors_x;
+    std::vector<double> errors_y;
+
+    std::cout << std::left << std::setw(10) << "Point"
+        << std::left << std::setw(20) << "Real x"
+        << std::left << std::setw(20) << "Predicted x"
+        << std::left << std::setw(15) << "Error x"
+        << std::left << std::setw(20) << "Real y"
+        << std::left << std::setw(20) << "Predicted y"
+        << std::left << std::setw(15) << "Error y" << std::endl;
+
+    std::cout << std::left << std::setw(10) << "----------"
+        << std::left << std::setw(20) << "--------------------"
+        << std::left << std::setw(20) << "--------------------"
+        << std::left << std::setw(15) << "---------------"
+        << std::left << std::setw(20) << "--------------------"
+        << std::left << std::setw(20) << "--------------------"
+        << std::left << std::setw(15) << "---------------" << std::endl;
+
+    for (int i = 0; i < points_2d.size(); i++) {
+        Vector3D temp3d = points_3d[i];
+        Vector4D temp1 = { temp3d[0],temp3d[1],temp3d[2],1 };
+        Vector3D temp2d = mult(K, mult(extrinsic, temp1));
+        temp2d = temp2d / temp2d[2];
+
+        double error_x = std::abs((points_2d[i][0] - temp2d[0]));
+        double error_y = std::abs((points_2d[i][1] - temp2d[1]));
+
+        errors_x.push_back(error_x);
+        errors_y.push_back(error_y);
+
+        std::cout << std::left << std::setw(10) << i
+            << std::left << std::setw(20) << points_2d[i][0]
+            << std::left << std::setw(20) << temp2d[0]
+            << std::left << std::setw(15) << error_x
+            << std::left << std::setw(20) << points_2d[i][1]
+            << std::left << std::setw(20) << temp2d[1]
+            << std::left << std::setw(15) << error_y << std::endl;
+    }
+
+    // calculate indicators
+    double mse_x = 0.0;
+    double mse_y = 0.0;
+    double mae_x = 0.0;
+    double mae_y = 0.0;
+    double std_x = 0.0;
+    double std_y = 0.0;
+
+    for (int i = 0; i < errors_x.size(); i++) {
+        mse_x += errors_x[i] * errors_x[i];
+        mse_y += errors_y[i] * errors_y[i];
+        mae_x += errors_x[i];
+        mae_y += errors_y[i];
+    }
+
+    mse_x /= errors_x.size();
+    mse_y /= errors_y.size();
+    mae_x /= errors_x.size();
+    mae_y /= errors_y.size();
+
+    for (int i = 0; i < errors_x.size(); i++) {
+        std_x += (errors_x[i] - mae_x) * (errors_x[i] - mae_x);
+        std_y += (errors_y[i] - mae_y) * (errors_y[i] - mae_y);
+    }
+
+    std_x = std::sqrt(std_x / errors_x.size());
+    std_y = std::sqrt(std_y / errors_y.size());
+
+    // output error indicators
+    std::cout << "MSE_x: " << mse_x << std::endl;
+    std::cout << "MSE_y: " << mse_y << std::endl;
+    std::cout << "MAE_x: " << mae_x << std::endl;
+    std::cout << "MAE_y: " << mae_y << std::endl;
+    std::cout << "STD_x: " << std_x << std::endl;
+    std::cout << "STD_y: " << std_y << std::endl;
+
 
 
     

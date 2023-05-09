@@ -138,62 +138,74 @@ bool Calibration::calibration(
     double v0 = scale2* dot(a2,a3);
     double cos_theta = -dot(a1a3,a2a3)/(a1a3.length()*a2a3.length());
     double sin_theta = sqrt(1-pow(cos_theta,2));
-    double alpha = scale2 * a1a3.length() * sin_theta;
-    double beta = scale2 * a2a3.length() * sin_theta;
-    fx = alpha; skew = -alpha*cos_theta/sin_theta; cx = u0; fy = beta/sin_theta; cy = v0;
-    Matrix33 K(fx,skew,cx,0,fy,cy,0,0,1);
+    if(sin_theta == 0){
+        std::cout<<"invalid output" << std::endl;
+    }
+    else {
+        double alpha = scale2 * a1a3.length() * sin_theta;
+        if(alpha != M[0] ){
+            scale = -scale;
+        }
+        double beta = scale2 * a2a3.length() * sin_theta;
+        fx = alpha;
+        skew = -alpha * cos_theta / sin_theta;
+        cx = u0;
+        fy = beta / sin_theta;
+        cy = v0;
+        Matrix33 K(fx, skew, cx, 0, fy, cy, 0, 0, 1);
 
-    std::cout<<"SVD RESULT " << mult(P, M) <<"finished" << std::endl; // check if Pm = 0
-    //   Optional: you can check if your M is correct by applying M on the 3D points. If correct, the projected point
-    //             should be very close to your input images points.
+        std::cout << "SVD RESULT " << mult(P, M) << "finished" << std::endl; // check if Pm = 0
+        //   Optional: you can check if your M is correct by applying M on the 3D points. If correct, the projected point
+        //             should be very close to your input images points.
 
-    // TODO: extract intrinsic parameters from M.
-    Vector3D r1 = a2a3 / a2a3.length();
-    Vector3D r3 = scale * a3;
-    Vector3D r2 = cross(r3,r1);
-    Vector3D b(M[3], M[7], M[11]);
-    Matrix invK = inverse(K);
-    t = scale * mult(invK, b)  ;
-    R.set_row(0,r1);
-    R.set_row(1,r2);
-    R.set_row(2,r3);
-    // output M and scale and a3
-    std::cout << "scale: " << scale << std::endl;
-    std::cout << "a3: " << a3 << std::endl;
-    std::cout << "R: " << R << std::endl;
-    std::cout << "t: " << t << std::endl;
-    std::cout << "K: " << K << std::endl;
-    std::cout << "b: " << b << std::endl;
-    std::cout << "invK: " << invK << std::endl;
+        //TODO: extract intrinsic parameters from M.
+        Vector3D r1 = a2a3 / a2a3.length();
+        Vector3D r3 = scale * a3;
+        Vector3D r2 = cross(r3, r1);
+        Vector3D b(M[3], M[7], M[11]);
+        Matrix invK = inverse(K);
+        t = scale * mult(invK, b);
+        R.set_row(0, r1);
+        R.set_row(1, r2);
+        R.set_row(2, r3);
+        // output M and scale and a3
+        std::cout << "scale: " << scale << std::endl;
+        std::cout << "a3: " << a3 << std::endl;
+        std::cout << "R: " << R << std::endl;
+        std::cout << "t: " << t << std::endl;
+        std::cout << "K: " << K << std::endl;
+        std::cout << "b: " << b << std::endl;
+        std::cout << "invK: " << invK << std::endl;
 // TODO: extract extrinsic parameters from M.
-    // test whether the corresponed point is correct or not, given the points_3d wether we obtain the points_2d
-    Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t], which is extrinsic matrix
-    extrinsic.set_column(0, R.get_column(0));
-    extrinsic.set_column(1, R.get_column(1));
-    extrinsic.set_column(2, R.get_column(2));
-    extrinsic.set_column(3, t);
-    // given a random 3d point from points_3d, we can obtain the 2d point, the result should be the same as the points_2d
-    Vector3D test = points_3d[0];
-    Vector4D test1 = { test[0],test[1],test[2],1 };
-    // CALCULATE [SU,SV,S] = [K[R|t]] * [X,Y,Z,1], NOTICE THE TRUE 2D COORD SHOULD BE [SU/S,SV/S,S]
-    Vector3D test2d = mult(K, mult(extrinsic, test1));
-    // output the m and
-    Matrix34 M1 = mult(K, extrinsic);
-    // output the m and m1, m1 should be the same as SCLAE* m
-    std::cout << "M1: " << M1 << std::endl;
-    std::cout << "M: " << scale* M << std::endl;
-    // out put and compare the 2d points ground truth and the points we obtain from the 3d points
-    std::cout << "extrinsic " << extrinsic << std::endl;
-    std::cout << "test2d" <<" " << test2d/test2d[2] << std::endl;
+        // test whether the corresponed point is correct or not, given the points_3d wether we obtain the points_2d
+        Matrix extrinsic = Matrix(3, 4, 0.0); // should be like [R | t], which is extrinsic matrix
+        extrinsic.set_column(0, R.get_column(0));
+        extrinsic.set_column(1, R.get_column(1));
+        extrinsic.set_column(2, R.get_column(2));
+        extrinsic.set_column(3, t);
+        // given a random 3d point from points_3d, we can obtain the 2d point, the result should be the same as the points_2d
+        Vector3D test = points_3d[0];
+        Vector4D test1 = {test[0], test[1], test[2], 1};
+        // CALCULATE [SU,SV,S] = [K[R|t]] * [X,Y,Z,1], NOTICE THE TRUE 2D COORD SHOULD BE [SU/S,SV/S,S]
+        Vector3D test2d = mult(K, mult(extrinsic, test1));
+        // output the m and
+        Matrix34 M1 = mult(K, extrinsic);
+        // output the m and m1, m1 should be the same as SCLAE* m
+        std::cout << "M1: " << M1 << std::endl;
+        std::cout << "M: " << scale * M << std::endl;
+        // out put and compare the 2d points ground truth and the points we obtain from the 3d points
+        std::cout << "extrinsic " << extrinsic << std::endl;
+        std::cout << "test2d" << " " << test2d / test2d[2] << std::endl;
 
-    std::cout << "points_2d[0]" <<" " << points_2d[0] << std::endl;
+        std::cout << "points_2d[0]" << " " << points_2d[0] << std::endl;
 
 
-
-    std::cout << "\n\tTODO: After you implement this function, please return 'true' - this will trigger the viewer to\n"
-                 "\t\tupdate the rendering using your recovered camera parameters. This can help you to visually check\n"
-                 "\t\tif your calibration is successful or not.\n\n" << std::flush;
-    return true;
+        std::cout
+                << "\n\tTODO: After you implement this function, please return 'true' - this will trigger the viewer to\n"
+                   "\t\tupdate the rendering using your recovered camera parameters. This can help you to visually check\n"
+                   "\t\tif your calibration is successful or not.\n\n" << std::flush;
+        return true;
+    }
 }
 
 

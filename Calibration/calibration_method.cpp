@@ -200,13 +200,96 @@ bool Calibration::calibration(
         std::cout << "points_2d[0]" << " " << points_2d[0] << std::endl;
 
 
-        std::cout
-                << "\n\tTODO: After you implement this function, please return 'true' - this will trigger the viewer to\n"
-                   "\t\tupdate the rendering using your recovered camera parameters. This can help you to visually check\n"
-                   "\t\tif your calibration is successful or not.\n\n" << std::flush;
+        std::vector<double> errors_x;
+        std::vector<double> errors_y;
+
+        std::cout << std::left << std::setw(10) << "Point"
+                  << std::left << std::setw(20) << "Real x"
+                  << std::left << std::setw(20) << "Predicted x"
+                  << std::left << std::setw(15) << "Error x"
+                  << std::left << std::setw(20) << "Real y"
+                  << std::left << std::setw(20) << "Predicted y"
+                  << std::left << std::setw(15) << "Error y" << std::endl;
+
+        std::cout << std::left << std::setw(10) << "----------"
+                  << std::left << std::setw(20) << "--------------------"
+                  << std::left << std::setw(20) << "--------------------"
+                  << std::left << std::setw(15) << "---------------"
+                  << std::left << std::setw(20) << "--------------------"
+                  << std::left << std::setw(20) << "--------------------"
+                  << std::left << std::setw(15) << "---------------" << std::endl;
+
+        for (int i = 0; i < points_2d.size(); i++) {
+            Vector3D temp3d = points_3d[i];
+            Vector4D temp1 = { temp3d[0],temp3d[1],temp3d[2],1 };
+            Vector3D temp2d = mult(K, mult(extrinsic, temp1));
+            temp2d = temp2d / temp2d[2];
+
+            double error_x = std::abs((points_2d[i][0] - temp2d[0]));
+            double error_y = std::abs((points_2d[i][1] - temp2d[1]));
+
+            errors_x.push_back(error_x);
+            errors_y.push_back(error_y);
+
+            std::cout << std::left << std::setw(10) << i
+                      << std::left << std::setw(20) << points_2d[i][0]
+                      << std::left << std::setw(20) << temp2d[0]
+                      << std::left << std::setw(15) << error_x
+                      << std::left << std::setw(20) << points_2d[i][1]
+                      << std::left << std::setw(20) << temp2d[1]
+                      << std::left << std::setw(15) << error_y << std::endl;
+        }
+
+        // calculate indicators
+        double mse_x = 0.0;
+        double mse_y = 0.0;
+        double mae_x = 0.0;
+        double mae_y = 0.0;
+        double std_x = 0.0;
+        double std_y = 0.0;
+
+        for (int i = 0; i < errors_x.size(); i++) {
+            mse_x += errors_x[i] * errors_x[i];
+            mse_y += errors_y[i] * errors_y[i];
+            mae_x += errors_x[i];
+            mae_y += errors_y[i];
+        }
+
+        mse_x /= errors_x.size();
+        mse_y /= errors_y.size();
+        mae_x /= errors_x.size();
+        mae_y /= errors_y.size();
+
+        for (int i = 0; i < errors_x.size(); i++) {
+            std_x += (errors_x[i] - mae_x) * (errors_x[i] - mae_x);
+            std_y += (errors_y[i] - mae_y) * (errors_y[i] - mae_y);
+        }
+
+        std_x = std::sqrt(std_x / errors_x.size());
+        std_y = std::sqrt(std_y / errors_y.size());
+
+        // output error indicators
+        std::cout << "MSE_x: " << mse_x << std::endl;
+        std::cout << "MSE_y: " << mse_y << std::endl;
+        std::cout << "MAE_x: " << mae_x << std::endl;
+        std::cout << "MAE_y: " << mae_y << std::endl;
+        std::cout << "STD_x: " << std_x << std::endl;
+        std::cout << "STD_y: " << std_y << std::endl;
+
+
+
+
+        std::cout << "\n\tTODO: After you implement this function, please return 'true' - this will trigger the viewer to\n"
+                     "\t\tupdate the rendering using your recovered camera parameters. This can help you to visually check\n"
+                     "\t\tif your calibration is successful or not.\n\n" << std::flush;
         return true;
     }
 }
+
+
+
+
+
 
 
 

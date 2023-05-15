@@ -143,7 +143,7 @@ bool Calibration::calibration(
     }
     else {
         double alpha = scale2 * a1a3.length() * sin_theta;
-        if(alpha != M[0] ){
+        if(alpha == -M[0] ){
             scale = -scale;
         }
         double beta = scale2 * a2a3.length() * sin_theta;

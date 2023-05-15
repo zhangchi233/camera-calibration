@@ -72,25 +72,7 @@ bool Calibration::calibration(
 
 
 
-    // TODO: the above code just demonstrates some useful data structures and APIs. Please remove all above code in your
-    //       final submission.
-
-    //--------------------------------------------------------------------------------------------------------------
-
-    std::cout << "\n[Liangliang]:\n"
-                 "\tThe input parameters of this function are:\n"
-                 "\t\t- points_3d: An array of 3D points (input to this function)\n"
-                 "\t\t- points_2d: An array of 2D image points (input to this function)\n"
-                 "\tThis function must return either 'true' on success or 'false' otherwise. On success, the camera\n"
-                 "\tparameters are returned by the following variables:\n"
-                 "\t\t- fx and fy: the focal lengths (in our slides, we use 'alpha' and 'beta')\n"
-                 "\t\t- cx and cy: the principal point (in our slides, we use 'u0' and 'v0')\n"
-                 "\t\t- skew:      the skew factor ('-alpha * cot_theta')\n"
-                 "\t\t- R:         the 3x3 rotation matrix encoding camera orientation\n"
-                 "\t\t- t:         a 3D vector encoding camera location.\n"
-                 "\tIMPORTANT: don't forget to write your recovered parameters to the above variables." << std::endl;
-
-    // TODO: check if input is valid (e.g., number of correspondences >= 6, sizes of 2D/3D points must match)
+        // TODO: check if input is valid (e.g., number of correspondences >= 6, sizes of 2D/3D points must match)
     bool check = points_3d.size() == points_2d.size();
     if(check){
         if(points_3d.size()< 6){
